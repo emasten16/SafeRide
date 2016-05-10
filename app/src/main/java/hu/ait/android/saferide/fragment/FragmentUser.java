@@ -11,9 +11,7 @@ import android.widget.Button;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.SupportMapFragment;
 
-import hu.ait.android.saferide.MainActivity;
 import hu.ait.android.saferide.R;
 
 /**
@@ -44,7 +42,16 @@ public class FragmentUser extends Fragment {
         }
 
         mMap = mMapView.getMap();
-        
+
+
+        Button btnPickUp = (Button) rootView.findViewById(R.id.btnPickUp);
+        btnPickUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new FragmentUserPickUp().show(getActivity().getFragmentManager(), FragmentUserPickUp.TAG);
+            }
+        });
+
 
         return rootView;
     }

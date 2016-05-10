@@ -4,19 +4,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/etUserLocation"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:hint="Your Location: Amherst Building"/>
+        android:text="Your Location:"/>
 
-    <EditText
-        android:id="@+id/etUserDestination"
+    <Spinner
+        android:id="@+id/spinnerLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:hint="Destination: Amherst Building" />
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Destination"/>
+
+    <Spinner
+        android:id="@+id/spinnerDestination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"/>
 
     <EditText
         android:id="@+id/etUserNumPeople"

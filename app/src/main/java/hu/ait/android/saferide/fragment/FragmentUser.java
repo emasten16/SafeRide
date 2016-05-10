@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,9 +44,20 @@ public class FragmentUser extends Fragment {
         mMap.getUiSettings().setAllGesturesEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        LatLng amherst = new LatLng(42.3708794, -72.5174623);
+        // webiste for coordinates:
+        // http://www.latlong.net/
+        LatLng amherst = new LatLng(42.370829, -72.516884);
         mMap.addMarker(new MarkerOptions().position(amherst));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(amherst, 17.0f));
+
+        LatLng johnsonChapel = new LatLng(42.370873, -72.517844);
+        mMap.addMarker(new MarkerOptions().position(johnsonChapel));
+
+        LatLng tylerHouse = new LatLng(42.377880, -72.515996);
+        mMap.addMarker(new MarkerOptions().position(tylerHouse));
+
+        LatLng plimptonHouse = new LatLng(42.377524, -72.515460);
+        mMap.addMarker(new MarkerOptions().position(plimptonHouse));
 
         Button btnPickUp = (Button) rootView.findViewById(R.id.btnPickUp);
         btnPickUp.setOnClickListener(new View.OnClickListener() {

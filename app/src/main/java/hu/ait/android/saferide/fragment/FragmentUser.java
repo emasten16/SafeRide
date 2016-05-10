@@ -11,8 +11,6 @@ import android.widget.Button;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -27,30 +25,25 @@ public class FragmentUser extends Fragment {
 
     private static MapView mMapView;
     private static GoogleMap mMap;
+    private static View rootView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_user, container, false);
+        rootView = inflater.inflate(R.layout.fragment_user, container, false);
 
         mMapView = (MapView) rootView.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
 
         mMapView.onResume();
 
-        try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
         mMap = mMapView.getMap();
+        mMap.getUiSettings().setAllGesturesEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
 
         LatLng amherst = new LatLng(42.3708794, -72.5174623);
         mMap.addMarker(new MarkerOptions().position(amherst));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(amherst));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(amherst, 17.0f));
 
         Button btnPickUp = (Button) rootView.findViewById(R.id.btnPickUp);
@@ -64,6 +57,7 @@ public class FragmentUser extends Fragment {
 
         return rootView;
     }
+
 
     @Override
     public void onResume() {

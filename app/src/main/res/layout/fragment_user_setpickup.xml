@@ -5,23 +5,32 @@
     android:orientation="vertical">
 
     <EditText
+        android:id="@+id/etUserLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:hint="Your Location: Amherst Building"/>
+
+    <EditText
+        android:id="@+id/etUserDestination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:hint="Destination: Amherst Building" />
+
+    <EditText
         android:id="@+id/etUserNumPeople"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="20dp"
         android:hint="Number of People"
         android:inputType="number" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="25dp"
-        android:hint="Location: Amherst Building Name" />
-
     <CheckBox
+        android:id="@+id/cbEmergency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="20dp"
         android:text="Emergency?" />
 
 </LinearLayout>

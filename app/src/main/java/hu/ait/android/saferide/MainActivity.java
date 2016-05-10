@@ -20,7 +20,7 @@ import hu.ait.android.saferide.fragment.FragmentSettings;
 import hu.ait.android.saferide.fragment.FragmentUser;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     public static FragmentManager fragmentManager;
 
@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
 
 
     @SuppressWarnings("StatementWithEmptyBody")

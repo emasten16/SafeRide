@@ -8,9 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import hu.ait.android.saferide.R;
 
@@ -41,8 +45,13 @@ public class FragmentUser extends Fragment {
             e.printStackTrace();
         }
 
+
         mMap = mMapView.getMap();
 
+        LatLng amherst = new LatLng(42.3708794, -72.5174623);
+        mMap.addMarker(new MarkerOptions().position(amherst));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(amherst));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(amherst, 17.0f));
 
         Button btnPickUp = (Button) rootView.findViewById(R.id.btnPickUp);
         btnPickUp.setOnClickListener(new View.OnClickListener() {
@@ -73,5 +82,7 @@ public class FragmentUser extends Fragment {
         super.onDestroyView();
         mMapView.onDestroy();
     }
+
+
 }
 

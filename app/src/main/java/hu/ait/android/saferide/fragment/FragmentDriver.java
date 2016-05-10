@@ -7,16 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import hu.ait.android.saferide.R;
 
 /**
  * Created by emasten on 5/10/16.
  */
-public class FragmentDriver extends Fragment{
+public class FragmentDriver extends Fragment {
 
     public static final String TAG = "FragmentDriver";
 
@@ -34,6 +37,7 @@ public class FragmentDriver extends Fragment{
 
         mMapView.onResume();
 
+
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
         } catch (Exception e) {
@@ -41,6 +45,11 @@ public class FragmentDriver extends Fragment{
         }
 
         mMap = mMapView.getMap();
+
+        LatLng amherst = new LatLng(42.3708794, -72.5174623);
+        mMap.addMarker(new MarkerOptions().position(amherst));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(amherst));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(amherst, 17.0f));
 
         return rootView;
     }

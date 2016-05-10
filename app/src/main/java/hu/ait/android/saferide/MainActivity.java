@@ -1,6 +1,5 @@
 package hu.ait.android.saferide;
 
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -12,12 +11,15 @@ import android.support.v7.widget.Toolbar;
 import android.support.v4.app.Fragment;
 import android.view.MenuItem;
 
+
 import hu.ait.android.saferide.fragment.FragmentAbout;
+import hu.ait.android.saferide.fragment.FragmentDriver;
 import hu.ait.android.saferide.fragment.FragmentHelp;
 import hu.ait.android.saferide.fragment.FragmentSettings;
+import hu.ait.android.saferide.fragment.FragmentUser;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
     }
 
     @Override
@@ -55,9 +59,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_user) {
-
+            showFragment(FragmentUser.TAG);
         } else if (id == R.id.nav_driver) {
-
+            showFragment(FragmentDriver.TAG);
         } else if (id == R.id.nav_settings) {
             showFragment(FragmentSettings.TAG);
         } else if (id == R.id.nav_help) {
@@ -81,6 +85,10 @@ public class MainActivity extends AppCompatActivity
                 fragment = new FragmentHelp();
             } else if (tag.equals(FragmentAbout.TAG)) {
                 fragment = new FragmentAbout();
+            } else if (tag.equals(FragmentUser.TAG)) {
+                fragment = new FragmentUser();
+            } else if (tag.equals(FragmentDriver.TAG)) {
+                fragment = new FragmentDriver();
             }
         }
 
@@ -92,4 +100,5 @@ public class MainActivity extends AppCompatActivity
 
         trans.commit();
     }
+
 }

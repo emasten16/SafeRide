@@ -10,44 +10,46 @@
     tools:context="hu.ait.android.saferide.SignUpActivity">
 
     <EditText
-        android:id="@+id/signUp_password"
+        android:id="@+id/signUp_etPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:inputType="textPassword"
         android:hint="Password" />
 
     <EditText
+        android:id="@+id/signUp_etConfPass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Confirm Password"
-        android:id="@+id/signUp_confPass"
+        android:layout_below="@+id/signUp_etPassword"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/signUp_password"/>
+        android:inputType="textPassword"
+        android:hint="Confirm Password" />
 
     <EditText
-        android:id="@+id/signUp_email"
+        android:id="@+id/signUp_etEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/signUp_password"
+        android:layout_above="@id/signUp_etPassword"
         android:layout_centerHorizontal="true"
         android:hint="Enter Amherst Email" />
 
     <TextView
-        android:id="@+id/signUp_text"
+        android:id="@+id/signUp_tvText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/signUp_email"
+        android:layout_above="@id/signUp_etEmail"
         android:layout_centerHorizontal="true"
         android:text="Login"
         android:textSize="50dp" />
 
     <CheckBox
+        android:id="@+id/signUp_cbDriver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Are you a driver?"
-        android:id="@+id/signUp_cbDriver"
+        android:layout_below="@+id/signUp_etConfPass"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/signUp_confPass"/>
+        android:text="Are you a driver?" />
 
     <Button
         android:id="@+id/signUp_btnSignUp"

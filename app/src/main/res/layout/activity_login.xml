@@ -11,25 +11,26 @@
 
 
     <EditText
-        android:id="@+id/login_password"
+        android:id="@+id/login_etPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:inputType="textPassword"
         android:hint="Password" />
 
     <EditText
-        android:id="@+id/login_email"
+        android:id="@+id/login_etEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/login_password"
+        android:layout_above="@id/login_etPassword"
         android:layout_centerHorizontal="true"
         android:hint="Enter Amherst Email" />
 
     <TextView
-        android:id="@+id/login_text"
+        android:id="@+id/login_tvText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/login_email"
+        android:layout_above="@id/login_etEmail"
         android:layout_centerHorizontal="true"
         android:text="Login"
         android:textSize="50dp" />
@@ -38,14 +39,14 @@
         android:id="@+id/login_btnSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/login_password"
+        android:layout_below="@+id/login_etPassword"
         android:text="Sign Up" />
 
     <Button
         android:id="@+id/login_btnLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/login_password"
+        android:layout_below="@+id/login_etPassword"
         android:layout_toRightOf="@+id/login_btnSignUp"
         android:text="Login" />
 

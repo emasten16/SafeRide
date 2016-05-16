@@ -1,16 +1,27 @@
 package hu.ait.android.saferide.fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.backendless.Backendless;
+import com.backendless.async.callback.BackendlessCallback;
+import com.backendless.exceptions.BackendlessFault;
+
+import hu.ait.android.saferide.MainActivity;
 import hu.ait.android.saferide.R;
+import hu.ait.android.saferide.data.RequestPickUp;
 
 /**
  * Created by emasten on 5/10/16.
@@ -31,16 +42,54 @@ public class FragmentUserPickUp extends DialogFragment {
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.places_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Spinner spinnerLocation = (Spinner) view.findViewById(R.id.spinnerLocation);
+        final Spinner spinnerLocation = (Spinner) view.findViewById(R.id.spinnerLocation);
         spinnerLocation.setAdapter(adapter);
-        Spinner spinnerDestination = (Spinner) view.findViewById(R.id.spinnerDestination);
+        final Spinner spinnerDestination = (Spinner) view.findViewById(R.id.spinnerDestination);
         spinnerDestination.setAdapter(adapter);
+
+        final EditText numPeople = (EditText) view.findViewById(R.id.etUserNumPeople);
+        final CheckBox isEmergency = (CheckBox) view.findViewById(R.id.cbEmergency);
 
 
         alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+                RequestPickUp pickUp = new RequestPickUp();
+                boolean valid = false;
+                // figure out how to get user from backendless
+                pickUp.setUser("setUser");
+                pickUp.setLocation(spinnerLocation.getSelectedItem().toString());
+                pickUp.setDestination(spinnerDestination.getSelectedItem().toString());
+
+
+                final Activity activity = getActivity();
+
+                String numP = numPeople.getText().toString();
+                if (numP.equals("")) {
+                    Toast.makeText(activity, "Set Number of People", Toast.LENGTH_SHORT).show();
+                } else {
+                    pickUp.setNumPeople(Integer.parseInt(numP));
+                    valid = true;
+                }
+
+                pickUp.setIsEmergency(isEmergency.isChecked());
+
+                if (valid) {
+                    Backendless.Persistence.save(pickUp, new BackendlessCallback<RequestPickUp>() {
+                        @Override
+                        public void handleResponse(RequestPickUp response) {
+                            Toast.makeText(activity, "Request Sent", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+                            super.handleFault(fault);
+                            Toast.makeText(activity, "Error: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    dialog.dismiss();
+                }
             }
         });
 

@@ -1,5 +1,6 @@
 package hu.ait.android.saferide.fragment;
 
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ import hu.ait.android.saferide.R;
 public class FragmentUser extends Fragment {
 
     public static final String TAG = "FragmentUser";
+    public static final int REQUEST_CODE = 100;
 
     private static MapView mMapView;
     private static GoogleMap mMap;
@@ -33,20 +35,21 @@ public class FragmentUser extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        // sets layout
         rootView = inflater.inflate(R.layout.fragment_user, container, false);
 
+        // sets map
         mMapView = (MapView) rootView.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
-
         mMapView.onResume();
-
         mMap = mMapView.getMap();
         mMap.getUiSettings().setAllGesturesEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
+
         // webiste for coordinates:
         // http://www.latlong.net/
-        LatLng amherst = new LatLng(42.370829, -72.516884);
+        /*LatLng amherst = new LatLng(42.370829, -72.516884);
         mMap.addMarker(new MarkerOptions().position(amherst));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(amherst, 17.0f));
 
@@ -57,8 +60,10 @@ public class FragmentUser extends Fragment {
         mMap.addMarker(new MarkerOptions().position(tylerHouse));
 
         LatLng plimptonHouse = new LatLng(42.377524, -72.515460);
-        mMap.addMarker(new MarkerOptions().position(plimptonHouse));
+        mMap.addMarker(new MarkerOptions().position(plimptonHouse));*/
 
+
+        // switches to dialog fragment
         Button btnPickUp = (Button) rootView.findViewById(R.id.btnPickUp);
         btnPickUp.setOnClickListener(new View.OnClickListener() {
             @Override

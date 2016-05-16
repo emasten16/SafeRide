@@ -56,6 +56,8 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(SignUpActivity.this, "Must be an Amherst email or passwords do not match", Toast.LENGTH_SHORT).show();
         }
 
+        // if user is valid, it adds it to backendless
+        // goes to main activity
         if (validUser) {
             Backendless.UserService.register(newUser, new AsyncCallback<BackendlessUser>() {
                 @Override

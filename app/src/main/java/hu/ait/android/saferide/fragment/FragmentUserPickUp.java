@@ -35,11 +35,12 @@ public class FragmentUserPickUp extends DialogFragment {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         alertDialogBuilder.setTitle("Set Pick Up");
 
+        // inflates layout
         LayoutInflater inflater = getActivity().getLayoutInflater();
-
         View view = inflater.inflate(R.layout.fragment_user_setpickup, null);
         alertDialogBuilder.setView(view);
 
+        // implements both spinners
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.places_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         final Spinner spinnerLocation = (Spinner) view.findViewById(R.id.spinnerLocation);
@@ -47,10 +48,12 @@ public class FragmentUserPickUp extends DialogFragment {
         final Spinner spinnerDestination = (Spinner) view.findViewById(R.id.spinnerDestination);
         spinnerDestination.setAdapter(adapter);
 
+
         final EditText numPeople = (EditText) view.findViewById(R.id.etUserNumPeople);
         final CheckBox isEmergency = (CheckBox) view.findViewById(R.id.cbEmergency);
 
-
+        // when user presses "OK", checks to see if user is valid (numPeople isnt empty)
+        // saves request to Backendless and goes back to user fragment
         alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

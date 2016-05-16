@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-
+        // switches to signup activity
         Button btnSignUp = (Button) findViewById(R.id.login_btnSignUp);
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // logs-in using backendless- switches to main activity
     @OnClick(R.id.login_btnLogin)
     public void loginClick(View v) {
         Backendless.UserService.login(etMail.getText().toString(), etPassword.getText().toString(), new AsyncCallback<BackendlessUser>() {

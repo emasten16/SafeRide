@@ -1,14 +1,14 @@
 package hu.ait.android.saferide;
 
-import android.support.v4.app.FragmentTransaction;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.support.v4.app.Fragment;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -18,14 +18,16 @@ import android.widget.Toast;
 
 import com.backendless.Backendless;
 
+import hu.ait.android.saferide.data.RequestPickUp;
 import hu.ait.android.saferide.fragment.FragmentAbout;
 import hu.ait.android.saferide.fragment.FragmentDriver;
 import hu.ait.android.saferide.fragment.FragmentHelp;
 import hu.ait.android.saferide.fragment.FragmentSettings;
 import hu.ait.android.saferide.fragment.FragmentUser;
+import hu.ait.android.saferide.fragment.FragmentUserPickUp;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, FragmentUserPickUp.RequestFragmentInterface{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +94,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showFragment(String tag) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+        Fragment fragment = getFragmentManager().findFragmentByTag(tag);
+        //Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
 
         if (fragment == null) {
             if (tag.equals(FragmentSettings.TAG)) {
@@ -108,13 +111,22 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction trans = getFragmentManager().beginTransaction();
 
         trans.replace(R.id.layoutContent, fragment, tag);
 
         trans.addToBackStack(null);
 
         trans.commit();
+    }
+
+    @Override
+    public void onRequestFragmentResult(RequestPickUp pickUpRequest) {
+        String loc = pickUpRequest.getLocation();
+        String dest = pickUpRequest.getDestination();
+
+        FragmentUser.setPoints(loc);
+        FragmentUser.setPoints(dest);
     }
 
 }

@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // if person is a USER open user fragment
-        // if person is a DRIVER open driver fragment
         showFragment(FragmentUser.TAG);
 
     }

@@ -19,6 +19,8 @@ public class FragmentAbout extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        // sets layout
         View rootView = inflater.inflate(R.layout.fragment_about, null, false);
 
         return rootView;

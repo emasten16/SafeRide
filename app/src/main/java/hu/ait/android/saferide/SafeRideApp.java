@@ -12,6 +12,7 @@ public class SafeRideApp extends Application {
     public void onCreate() {
         super.onCreate();
 
+        // needed to use backendless. do not change
         Backendless.initApp(this,
                 "E7C12938-20E9-CF26-FF77-E8458F43D000",
                 "6350DDD6-B59C-C0AB-FFD7-8B02C90F1100",

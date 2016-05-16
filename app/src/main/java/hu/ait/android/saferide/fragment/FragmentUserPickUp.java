@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,7 +18,6 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.BackendlessCallback;
 import com.backendless.exceptions.BackendlessFault;
 
-import hu.ait.android.saferide.MainActivity;
 import hu.ait.android.saferide.R;
 import hu.ait.android.saferide.data.RequestPickUp;
 
@@ -45,11 +43,11 @@ public class FragmentUserPickUp extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        //try {
+        try {
             fragmentInterface = (RequestFragmentInterface) activity;
-        /*} catch (ClassCastException e) {
+        } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement FragmentInterface");
-        }*/
+        }
     }
 
     @Override
@@ -82,7 +80,7 @@ public class FragmentUserPickUp extends DialogFragment {
                 RequestPickUp pickUp = new RequestPickUp();
                 boolean valid = false;
                 // figure out how to get user from backendless
-                pickUp.setUser("setUser");
+                pickUp.setUser(Backendless.UserService.CurrentUser().getEmail().toString());
                 pickUp.setLocation(spinnerLocation.getSelectedItem().toString());
                 pickUp.setDestination(spinnerDestination.getSelectedItem().toString());
                 pickUp.setIsEmergency(isEmergency.isChecked());
@@ -97,7 +95,7 @@ public class FragmentUserPickUp extends DialogFragment {
                 }
 
                 // sets pickUp request for user fragment
-                fragmentInterface.onRequestFragmentResult(pickUp);
+                if (valid) {fragmentInterface.onRequestFragmentResult(pickUp);}
 
                 if (valid) {
                     Backendless.Persistence.save(pickUp, new BackendlessCallback<RequestPickUp>() {
@@ -105,14 +103,12 @@ public class FragmentUserPickUp extends DialogFragment {
                         public void handleResponse(RequestPickUp response) {
                             Toast.makeText(activity, "Request Sent", Toast.LENGTH_SHORT).show();
                         }
-
                         @Override
                         public void handleFault(BackendlessFault fault) {
                             super.handleFault(fault);
                             Toast.makeText(activity, "Error: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
-
                     dialog.dismiss();
                 }
             }

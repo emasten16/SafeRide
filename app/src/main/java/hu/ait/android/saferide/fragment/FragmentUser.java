@@ -50,22 +50,6 @@ public class FragmentUser extends Fragment{
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(amherst, 17.0f));
 
 
-        // webiste for coordinates:
-        // http://www.latlong.net/
-        /*LatLng amherst = new LatLng(42.370829, -72.516884);
-        mMap.addMarker(new MarkerOptions().position(amherst));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(amherst, 17.0f));
-
-        LatLng johnsonChapel = new LatLng(42.370873, -72.517844);
-        mMap.addMarker(new MarkerOptions().position(johnsonChapel));
-
-        LatLng tylerHouse = new LatLng(42.377880, -72.515996);
-        mMap.addMarker(new MarkerOptions().position(tylerHouse));
-
-        LatLng plimptonHouse = new LatLng(42.377524, -72.515460);
-        mMap.addMarker(new MarkerOptions().position(plimptonHouse));*/
-
-
         // switches to dialog fragment
         Button btnPickUp = (Button) rootView.findViewById(R.id.btnPickUp);
         btnPickUp.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +77,9 @@ public class FragmentUser extends Fragment{
 
     public static void setPoints(String place) {
         LatLng newPlace = null;
+
+        // webiste for coordinates:
+        // http://www.latlong.net/
 
         if (place.equals("Tyler")) {
             newPlace = new LatLng(42.377880, -72.515996);

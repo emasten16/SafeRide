@@ -120,6 +120,8 @@ public class MainActivity extends AppCompatActivity
         trans.commit();
     }
 
+
+    // info from dialog fragment for user fragment
     @Override
     public void onRequestFragmentResult(RequestPickUp pickUpRequest) {
         String loc = pickUpRequest.getLocation();

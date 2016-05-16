@@ -3,7 +3,8 @@ package hu.ait.android.saferide.fragment;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +19,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import hu.ait.android.saferide.R;
+import hu.ait.android.saferide.data.RequestPickUp;
 
 /**
  * Created by emasten on 5/10/16.
  */
-public class FragmentUser extends Fragment {
+public class FragmentUser extends Fragment{
 
     public static final String TAG = "FragmentUser";
-    public static final int REQUEST_CODE = 100;
 
     private static MapView mMapView;
     private static GoogleMap mMap;
@@ -45,6 +46,8 @@ public class FragmentUser extends Fragment {
         mMap = mMapView.getMap();
         mMap.getUiSettings().setAllGesturesEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
+        LatLng amherst = new LatLng(42.370829, -72.516884);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(amherst, 17.0f));
 
 
         // webiste for coordinates:
@@ -68,12 +71,36 @@ public class FragmentUser extends Fragment {
         btnPickUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new FragmentUserPickUp().show(getActivity().getFragmentManager(), FragmentUserPickUp.TAG);
+                showDialog();
             }
         });
 
 
         return rootView;
+    }
+
+    void showDialog() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag(FragmentUserPickUp.TAG);
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        FragmentUserPickUp newFragment = FragmentUserPickUp.newInstance();
+        newFragment.show(getFragmentManager(), FragmentUserPickUp.TAG);
+    }
+
+    public static void setPoints(String place) {
+        LatLng newPlace = null;
+
+        if (place.equals("Tyler")) {
+            newPlace = new LatLng(42.377880, -72.515996);
+        } else if (place.equals("Plimpton")) {
+            newPlace = new LatLng(42.377524, -72.515460);
+        }
+
+        mMap.addMarker(new MarkerOptions().position(newPlace));
     }
 
 
@@ -94,7 +121,6 @@ public class FragmentUser extends Fragment {
         super.onDestroyView();
         mMapView.onDestroy();
     }
-
 
 }
 

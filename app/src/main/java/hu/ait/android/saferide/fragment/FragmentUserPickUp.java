@@ -30,6 +30,28 @@ public class FragmentUserPickUp extends DialogFragment {
 
     public static final String TAG = "DialogFragmentUserPickUp";
 
+    // to send data back to main fragments
+    public interface RequestFragmentInterface {
+        public void onRequestFragmentResult(RequestPickUp pickUpRequest);
+    }
+
+    private RequestFragmentInterface fragmentInterface;
+
+    static FragmentUserPickUp newInstance() {
+        FragmentUserPickUp f = new FragmentUserPickUp();
+        return f;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        //try {
+            fragmentInterface = (RequestFragmentInterface) activity;
+        /*} catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement FragmentInterface");
+        }*/
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
@@ -63,11 +85,10 @@ public class FragmentUserPickUp extends DialogFragment {
                 pickUp.setUser("setUser");
                 pickUp.setLocation(spinnerLocation.getSelectedItem().toString());
                 pickUp.setDestination(spinnerDestination.getSelectedItem().toString());
-
-
-                final Activity activity = getActivity();
+                pickUp.setIsEmergency(isEmergency.isChecked());
 
                 String numP = numPeople.getText().toString();
+                final Activity activity = getActivity();
                 if (numP.equals("")) {
                     Toast.makeText(activity, "Set Number of People", Toast.LENGTH_SHORT).show();
                 } else {
@@ -75,7 +96,8 @@ public class FragmentUserPickUp extends DialogFragment {
                     valid = true;
                 }
 
-                pickUp.setIsEmergency(isEmergency.isChecked());
+                // sets pickUp request for user fragment
+                fragmentInterface.onRequestFragmentResult(pickUp);
 
                 if (valid) {
                     Backendless.Persistence.save(pickUp, new BackendlessCallback<RequestPickUp>() {

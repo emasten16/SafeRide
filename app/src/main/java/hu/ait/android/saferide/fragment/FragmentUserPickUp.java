@@ -80,7 +80,6 @@ public class FragmentUserPickUp extends DialogFragment {
                 RequestPickUp pickUp = new RequestPickUp();
                 boolean valid = false;
 
-
                 // Sets request for pickup
                 pickUp.setUser(Backendless.UserService.CurrentUser().getEmail().toString());
                 pickUp.setLocation(spinnerLocation.getSelectedItem().toString());
@@ -95,10 +94,8 @@ public class FragmentUserPickUp extends DialogFragment {
                     valid = true;
                 }
 
-
                 // sets pickUp request for user fragment
                 if (valid) {fragmentInterface.onRequestFragmentResult(pickUp);}
-
 
                 if (valid) {
                     Backendless.Persistence.save(pickUp, new BackendlessCallback<RequestPickUp>() {
@@ -112,7 +109,6 @@ public class FragmentUserPickUp extends DialogFragment {
                             Toast.makeText(activity, "Error: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
-                    dialog.dismiss();
                 }
             }
         });

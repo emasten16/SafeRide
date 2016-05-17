@@ -11,10 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.backendless.Backendless;
 
@@ -122,13 +119,14 @@ public class MainActivity extends AppCompatActivity
 
 
     // info from dialog fragment for user fragment
+    // 0 for location, 1 for destination
     @Override
     public void onRequestFragmentResult(RequestPickUp pickUpRequest) {
         String loc = pickUpRequest.getLocation();
         String dest = pickUpRequest.getDestination();
 
-        FragmentUser.setPoints(loc);
-        FragmentUser.setPoints(dest);
+        FragmentUser.setPoints(loc, 0);
+        FragmentUser.setPoints(dest, 1);
     }
 
 }

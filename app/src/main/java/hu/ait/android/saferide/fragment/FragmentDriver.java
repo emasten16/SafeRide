@@ -16,6 +16,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -31,6 +32,7 @@ public class FragmentDriver extends Fragment {
 
     private static MapView mMapView;
     private static GoogleMap mMap;
+    ArrayList<RequestPickUp> requests;
 
     @Nullable
     @Override
@@ -48,30 +50,44 @@ public class FragmentDriver extends Fragment {
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(amherst, 17.0f));
 
 
-        ArrayList<RequestPickUp> requestPickUps = refreshQ();
 
-        // ARRAYLIST IS SIZE 0
-        Toast.makeText(getActivity(), "" + requestPickUps.size() + "", Toast.LENGTH_SHORT).show();
+        requests = new ArrayList<>();
+        refreshQ();
+
+        /*if (!requests.isEmpty()) {
+            RequestPickUp current = requests.remove(0);
+            Backendless.Persistence.of(RequestPickUp.class).remove(current);
+
+            showDialog(current);
+        }*/
+
 
         return rootView;
     }
 
-    public ArrayList<RequestPickUp> refreshQ() {
-
-        final ArrayList<RequestPickUp> requests = new ArrayList<RequestPickUp>();
-
+    public void refreshQ() {
         Backendless.Persistence.of(RequestPickUp.class).find(new BackendlessCallback<BackendlessCollection<RequestPickUp>>() {
             @Override
             public void handleResponse(BackendlessCollection<RequestPickUp> response) {
-                Iterator<RequestPickUp> requestIterator = response.getCurrentPage().iterator();
-                while (requestIterator.hasNext()) {
-                    RequestPickUp r = requestIterator.next();
-                    if (!requests.contains(r))  requests.add(r);
+                Iterator<RequestPickUp> iterator = response.getCurrentPage().iterator();
+
+                while (iterator.hasNext()) {
+                    RequestPickUp r = iterator.next();
+                    requests.add(0, r);
                 }
             }
         });
 
-        return requests;
+        Toast.makeText(getActivity(), "b: " + requests.size() + "", Toast.LENGTH_SHORT).show();
+    }
+
+    protected void showDialog(RequestPickUp r) {
+        FragmentDriverPickUp dialog = new FragmentDriverPickUp();
+        Bundle b = new Bundle();
+        b.putSerializable(FragmentDriverPickUp.KEY_PICKUP, r);
+        dialog.setArguments(b);
+        dialog.setCancelable(false);
+        dialog.show(getFragmentManager(), FragmentDriverPickUp.TAG);
     }
 
     @Override

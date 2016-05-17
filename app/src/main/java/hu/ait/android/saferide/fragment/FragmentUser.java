@@ -55,6 +55,7 @@ public class FragmentUser extends Fragment{
         btnPickUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mMap.clear();
                 showDialog();
             }
         });
@@ -81,10 +82,25 @@ public class FragmentUser extends Fragment{
         // webiste for coordinates:
         // http://www.latlong.net/
 
-        if (place.equals("Tyler")) {
-            newPlace = new LatLng(42.377880, -72.515996);
-        } else if (place.equals("Plimpton")) {
+        if (place.equals("Appleton")) {
+            newPlace = new LatLng(42.370256, -72.517930);
+        }
+        else if (place.equals("Charles Pratt")) {
+            newPlace = new LatLng(42.370192, -72.516120);
+        } else if (place.equals("The Hill")) {
             newPlace = new LatLng(42.377524, -72.515460);
+        } else if (place.equals("King and Wieland")) {
+            newPlace = new LatLng(42.369732, -72.513223);
+        } else if (place.equals("Morris Pratt")) {
+            newPlace = new LatLng(42.372384, -72.517611);
+        } else if (place.equals("Morrow")) {
+            newPlace = new LatLng(42.372423, -72.516345);
+        } else if (place.equals("North")) {
+            newPlace = new LatLng(42.371155, -72.518062);
+        } else if (place.equals("South")) {
+            newPlace = new LatLng(42.370592, -72.518067);
+        }else if (place.equals("The Triangle")) {
+            newPlace = new LatLng(42.373596, -72.520395);
         }
 
         mMap.addMarker(new MarkerOptions().position(newPlace));

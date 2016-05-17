@@ -1,9 +1,11 @@
 package hu.ait.android.saferide.data;
 
+import java.io.Serializable;
+
 /**
  * Created by emasten on 5/16/16.
  */
-public class RequestPickUp {
+public class RequestPickUp implements Serializable {
 
     private String user;
     private String location;

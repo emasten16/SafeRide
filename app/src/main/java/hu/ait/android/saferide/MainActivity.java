@@ -27,7 +27,7 @@ import hu.ait.android.saferide.fragment.FragmentUser;
 import hu.ait.android.saferide.fragment.FragmentUserPickUp;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, FragmentUserPickUp.RequestFragmentInterface{
+        implements NavigationView.OnNavigationItemSelectedListener, FragmentUserPickUp.RequestFragmentInterface {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // sets username to titly in side menu
-        View navHeaderView =  navigationView.getHeaderView(0);
+        View navHeaderView = navigationView.getHeaderView(0);
         TextView tvHeader = (TextView) navHeaderView.findViewById(R.id.nav_tvHeader);
         tvHeader.setText(Backendless.UserService.CurrentUser().getEmail().toString());
 

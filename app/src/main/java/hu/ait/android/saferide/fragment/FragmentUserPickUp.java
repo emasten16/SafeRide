@@ -79,12 +79,13 @@ public class FragmentUserPickUp extends DialogFragment {
             public void onClick(DialogInterface dialog, int which) {
                 RequestPickUp pickUp = new RequestPickUp();
                 boolean valid = false;
-                // figure out how to get user from backendless
+
+
+                // Sets request for pickup
                 pickUp.setUser(Backendless.UserService.CurrentUser().getEmail().toString());
                 pickUp.setLocation(spinnerLocation.getSelectedItem().toString());
                 pickUp.setDestination(spinnerDestination.getSelectedItem().toString());
                 pickUp.setIsEmergency(isEmergency.isChecked());
-
                 String numP = numPeople.getText().toString();
                 final Activity activity = getActivity();
                 if (numP.equals("")) {
@@ -94,8 +95,10 @@ public class FragmentUserPickUp extends DialogFragment {
                     valid = true;
                 }
 
+
                 // sets pickUp request for user fragment
                 if (valid) {fragmentInterface.onRequestFragmentResult(pickUp);}
+
 
                 if (valid) {
                     Backendless.Persistence.save(pickUp, new BackendlessCallback<RequestPickUp>() {

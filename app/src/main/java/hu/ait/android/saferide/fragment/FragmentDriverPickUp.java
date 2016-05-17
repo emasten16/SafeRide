@@ -33,16 +33,16 @@ public class FragmentDriverPickUp extends DialogFragment {
         alertDialogBuilder.setView(view);
 
         // sets dialog data to the request
-        RequestPickUp requestPickUp = (RequestPickUp) getArguments().getSerializable(KEY_PICKUP);
+        final RequestPickUp requestPickUp = (RequestPickUp) getArguments().getSerializable(KEY_PICKUP);
 
         TextView tvName = (TextView) view.findViewById(R.id.driver_tvName);
-        tvName.setText(requestPickUp.getUser());
+        tvName.setText("User: " + requestPickUp.getUser());
         TextView tvLocation = (TextView) view.findViewById(R.id.driver_tvLocation);
-        tvLocation.setText(requestPickUp.getLocation());
+        tvLocation.setText("Location: " + requestPickUp.getLocation());
         TextView tvDestination = (TextView) view.findViewById(R.id.driver_tvDestination);
-        tvDestination.setText(requestPickUp.getDestination());
+        tvDestination.setText("Destination: " + requestPickUp.getDestination());
         TextView tvNumPeople = (TextView) view.findViewById(R.id.driver_tvNumPeople);
-        tvNumPeople.setText(requestPickUp.getNumPeople());
+        tvNumPeople.setText("Number of People: " + String.valueOf(requestPickUp.getNumPeople()));
 
         // Emergency????
 
@@ -52,15 +52,21 @@ public class FragmentDriverPickUp extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+                // SENDS MESSAGE TO USER SAYING DRIVER IS ON ITS WAY
+
+                // starts drive UI
+                FragmentDriver fd = new FragmentDriver();
+                fd.startDrive(requestPickUp);
             }
         });
 
 
         // dismisses request
-        alertDialogBuilder.setPositiveButton("Decline", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton("Decline", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // need to send info back to user that request was declined
+                // SENDS MESSAGE TO USER SAYING REQUEST WAS DECLINED
+                // GOES BACK TO FRAGMENT DRIVER AND REFRESHES Q
                 dismiss();
             }
         });

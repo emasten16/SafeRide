@@ -1,6 +1,5 @@
 package hu.ait.android.saferide.fragment;
 
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.app.Fragment;
@@ -8,29 +7,29 @@ import android.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.Projection;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import hu.ait.android.saferide.R;
-import hu.ait.android.saferide.data.RequestPickUp;
 
 /**
  * Created by emasten on 5/10/16.
  */
-public class FragmentUser extends Fragment{
+public class FragmentUser extends Fragment {
 
     public static final String TAG = "FragmentUser";
 
     private static MapView mMapView;
     private static GoogleMap mMap;
     private static View rootView;
+    private Projection projection;
 
     @Nullable
     @Override
@@ -76,7 +75,7 @@ public class FragmentUser extends Fragment{
         newFragment.show(getFragmentManager(), FragmentUserPickUp.TAG);
     }
 
-    public static void setPoints(String place) {
+    public static void setPoints(String place, int i) {
         LatLng newPlace = null;
 
         // webiste for coordinates:
@@ -84,8 +83,7 @@ public class FragmentUser extends Fragment{
 
         if (place.equals("Appleton")) {
             newPlace = new LatLng(42.370256, -72.517930);
-        }
-        else if (place.equals("Charles Pratt")) {
+        } else if (place.equals("Charles Pratt")) {
             newPlace = new LatLng(42.370192, -72.516120);
         } else if (place.equals("The Hill")) {
             newPlace = new LatLng(42.377524, -72.515460);
@@ -99,11 +97,19 @@ public class FragmentUser extends Fragment{
             newPlace = new LatLng(42.371155, -72.518062);
         } else if (place.equals("South")) {
             newPlace = new LatLng(42.370592, -72.518067);
-        }else if (place.equals("The Triangle")) {
+        } else if (place.equals("The Triangle")) {
             newPlace = new LatLng(42.373596, -72.520395);
         }
 
-        mMap.addMarker(new MarkerOptions().position(newPlace));
+        // 0 for location, 1 for destination
+        if (i == 0) {
+            mMap.addMarker(new MarkerOptions()
+                    .position(newPlace)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        } else {
+            mMap.addMarker(new MarkerOptions()
+                    .position(newPlace));
+        }
     }
 
 

@@ -65,8 +65,8 @@ public class FragmentDriverPickUp extends DialogFragment {
         alertDialogBuilder.setNegativeButton("Decline", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
                 // SENDS MESSAGE TO USER SAYING REQUEST WAS DECLINED
-                // GOES BACK TO FRAGMENT DRIVER AND REFRESHES Q
                 dismiss();
             }
         });

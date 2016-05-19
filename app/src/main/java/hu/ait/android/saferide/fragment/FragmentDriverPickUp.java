@@ -66,21 +66,7 @@ public class FragmentDriverPickUp extends DialogFragment {
             public void onClick(DialogInterface dialog, int which) {
 
                 // Sends message to user saying driver has accepted request and is on his/her way
-                Message message = new Message();
-                message.setToUser(user);
-                message.setMessageText("Request accepted: Driver on his/her way");
-                Backendless.Persistence.save(message, new BackendlessCallback<Message>() {
-                    @Override
-                    public void handleResponse(Message response) {
-                        Toast.makeText(activity, "request accepted message sent", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void handleFault(BackendlessFault fault) {
-                        super.handleFault(fault);
-                        Toast.makeText(activity, "Error: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                sendRequestAcceptedMessage(user, activity);
 
                 // sets driving points
                 // driving state changed to arriving
@@ -92,5 +78,24 @@ public class FragmentDriverPickUp extends DialogFragment {
 
 
         return alertDialogBuilder.create();
+    }
+
+
+    public void sendRequestAcceptedMessage(String user, final Activity activity) {
+        Message message = new Message();
+        message.setToUser(user);
+        message.setMessageText("Request accepted: Driver on his/her way");
+        Backendless.Persistence.save(message, new BackendlessCallback<Message>() {
+            @Override
+            public void handleResponse(Message response) {
+                Toast.makeText(activity, "request accepted message sent", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                super.handleFault(fault);
+                Toast.makeText(activity, "Error: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

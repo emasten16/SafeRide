@@ -65,22 +65,25 @@ public class FragmentDriver extends Fragment {
             @Override
             public void onClick(View v) {
 
+                RequestPickUp current = null;
+
                 // Refreshes Q to check for requests
                 if (driver_state == REFRESH) {
                     refreshQ();
-
                     // checks to see if there's a new request
                     // makes emergency requests priority
                     if (!requests.isEmpty()) {
-                        RequestPickUp current = requests.get(0);
-                        if (!emergencyRequests.isEmpty()) {
-                            current = emergencyRequests.get(0);
-                        }
+                        current = requests.get(0);
+                    }
+                    if (!emergencyRequests.isEmpty()) {
+                        current = emergencyRequests.get(0);
+                    }
+
+                    if (current != null) {
+                        showDialog(current);
 
                         // REMOVE DATA FROM BACKENDLESS
                         //Backendless.Persistence.of(RequestPickUp.class).remove(current);
-
-                        showDialog(current);
 
                         driver_state = ARRIVING;
                         btnRefresh.setText("Arriving");
@@ -90,7 +93,9 @@ public class FragmentDriver extends Fragment {
                 }
                 // Notifies User that driver is arriving
                 else if (driver_state == ARRIVING) {
-                    RequestPickUp current = requests.get(0);
+                    if (!requests.isEmpty()) {
+                        current = requests.get(0);
+                    }
                     if (!emergencyRequests.isEmpty()) {
                         current = emergencyRequests.get(0);
                     }
@@ -104,6 +109,7 @@ public class FragmentDriver extends Fragment {
                 }
                 // Ends the process and switches back to being able to refresh Q
                 else if (driver_state == DROPPED_OFF) {
+
                     mMap.clear();
 
                     driver_state = REFRESH;

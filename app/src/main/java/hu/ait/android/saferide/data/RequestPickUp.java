@@ -11,7 +11,7 @@ public class RequestPickUp implements Serializable {
     private String location;
     private String destination;
     private int numPeople;
-    private boolean isEmergency;
+    private boolean emergency;
 
     public RequestPickUp() {
 
@@ -50,10 +50,10 @@ public class RequestPickUp implements Serializable {
     }
 
     public boolean isEmergency() {
-        return isEmergency;
+        return emergency;
     }
 
     public void setIsEmergency(boolean isEmergency) {
-        this.isEmergency = isEmergency;
+        this.emergency = isEmergency;
     }
 }

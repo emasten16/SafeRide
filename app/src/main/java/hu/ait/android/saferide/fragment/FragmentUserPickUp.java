@@ -72,7 +72,7 @@ public class FragmentUserPickUp extends DialogFragment {
         final EditText numPeople = (EditText) view.findViewById(R.id.etUserNumPeople);
         final CheckBox isEmergency = (CheckBox) view.findViewById(R.id.cbEmergency);
 
-        // when user presses "OK", checks to see if user is valid (numPeople isnt empty)
+        // when user presses "OK", checks to see if user is valid (numPeople isn't empty)
         // saves request to Backendless and goes back to user fragment
         alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -94,6 +94,7 @@ public class FragmentUserPickUp extends DialogFragment {
                     valid = true;
                 }
 
+
                 // sets pickUp request for user fragment
                 if (valid) {
                     fragmentInterface.onRequestFragmentResult(pickUp);
@@ -113,6 +114,14 @@ public class FragmentUserPickUp extends DialogFragment {
                         }
                     });
                 }
+            }
+        });
+
+        // Cancels request
+        alertDialogBuilder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dismiss();
             }
         });
 

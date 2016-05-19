@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.async.callback.BackendlessCallback;
+import com.backendless.exceptions.BackendlessFault;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import hu.ait.android.saferide.R;
+import hu.ait.android.saferide.data.Message;
 import hu.ait.android.saferide.data.RequestPickUp;
 
 /**
@@ -35,6 +37,7 @@ public class FragmentDriver extends Fragment {
     private static MapView mMapView;
     private static GoogleMap mMap;
     ArrayList<RequestPickUp> requests = new ArrayList<>();
+    ArrayList<RequestPickUp> emergencyRequests = new ArrayList<>();
 
     public static short REFRESH = 0;
     public static short ARRIVING = 1;
@@ -46,24 +49,18 @@ public class FragmentDriver extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // sets layout
-        final View rootView = inflater.inflate(R.layout.fragment_driver, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_driver, container, false);
 
         // sets map
         mMapView = (MapView) rootView.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
-        mMapView.onResume();
-        mMap = mMapView.getMap();
-        mMap.getUiSettings().setAllGesturesEnabled(true);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        LatLng amherst = new LatLng(42.3708794, -72.5174623);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(amherst, 17.0f));
+        setMap();
 
 
         // Button for driver
         // switches between Refresh, Arriving, and Dropped Off
         driver_state = REFRESH;
         final Button btnRefresh = (Button) rootView.findViewById(R.id.btnRefresh);
-        btnRefresh.setText("Refresh");
         btnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,41 +69,79 @@ public class FragmentDriver extends Fragment {
                 if (driver_state == REFRESH) {
                     refreshQ();
 
+                    // checks to see if there's a new request
+                    // makes emergency requests priority
                     if (!requests.isEmpty()) {
-                        RequestPickUp current = requests.remove(0);
+                        RequestPickUp current = requests.get(0);
+                        if (!emergencyRequests.isEmpty()) {
+                            current = emergencyRequests.get(0);
+                        }
 
                         // REMOVE DATA FROM BACKENDLESS
                         //Backendless.Persistence.of(RequestPickUp.class).remove(current);
 
                         showDialog(current);
-                        btnRefresh.setText("Arriving");
 
+                        driver_state = ARRIVING;
+                        btnRefresh.setText("Arriving");
 
                         requests.clear();
                     }
                 }
                 // Notifies User that driver is arriving
                 else if (driver_state == ARRIVING) {
-                    // SEND MESSAGE TO USER
+                    RequestPickUp current = requests.get(0);
+                    if (!emergencyRequests.isEmpty()) {
+                        current = emergencyRequests.get(0);
+                    }
 
-                    Toast.makeText(getActivity(), "Notifiy user I am arriving", Toast.LENGTH_SHORT).show();
+                    // sends arriving message to user
+                    sendArrivingMessage(current.getUser());
+
+                    // changes driver state
                     driver_state = DROPPED_OFF;
                     btnRefresh.setText("Dropped Off");
                 }
                 // Ends the process and switches back to being able to refresh Q
                 else if (driver_state == DROPPED_OFF) {
-                    Toast.makeText(getActivity(), "Dropped Off", Toast.LENGTH_SHORT).show();
                     mMap.clear();
+
                     driver_state = REFRESH;
                     btnRefresh.setText("Refresh");
                 }
+
+
             }
         });
-
 
         return rootView;
     }
 
+    public void setMap() {
+        mMapView.onResume();
+        mMap = mMapView.getMap();
+        mMap.getUiSettings().setAllGesturesEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        LatLng amherst = new LatLng(42.3708794, -72.5174623);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(amherst, 17.0f));
+    }
+
+    public void sendArrivingMessage(String user) {
+        Message message = new Message();
+        message.setToUser(user);
+        message.setMessageText("Driver has arrived");
+        Backendless.Persistence.save(message, new BackendlessCallback<Message>() {
+            @Override
+            public void handleResponse(Message response) {
+                Toast.makeText(getActivity(), "arriving message sent", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                super.handleFault(fault);
+                Toast.makeText(getActivity(), "Error: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     public void refreshQ() {
 
@@ -121,7 +156,12 @@ public class FragmentDriver extends Fragment {
                 while (iterator.hasNext()) {
                     RequestPickUp r = iterator.next();
 
-                    requests.add(0, r);
+                    // checks to see if request is emergency or not
+                    if (r.isEmergency()) {
+                        emergencyRequests.add(0,r);
+                    } else {
+                        requests.add(0, r);
+                    }
                 }
             }
         });
@@ -130,6 +170,7 @@ public class FragmentDriver extends Fragment {
 
 
     protected void showDialog(RequestPickUp r) {
+        // shows dialog user's request
         FragmentDriverPickUp dialog = new FragmentDriverPickUp();
         Bundle b = new Bundle();
         b.putSerializable(FragmentDriverPickUp.KEY_PICKUP, r);
@@ -223,7 +264,6 @@ public class FragmentDriver extends Fragment {
                     .position(newPlace));
         }
     }
-
 
     @Override
     public void onResume() {

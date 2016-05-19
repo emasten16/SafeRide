@@ -53,7 +53,7 @@ public class FragmentUserPickUp extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setTitle("Set Pick Up");
+        alertDialogBuilder.setTitle(R.string.user_pickUpRequest);
 
         // inflates layout
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -88,7 +88,7 @@ public class FragmentUserPickUp extends DialogFragment {
                 String numP = numPeople.getText().toString();
                 final Activity activity = getActivity();
                 if (numP.equals("")) {
-                    Toast.makeText(activity, "Set Number of People", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, R.string.setNumPeople, Toast.LENGTH_SHORT).show();
                 } else {
                     pickUp.setNumPeople(Integer.parseInt(numP));
                     valid = true;

@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_about) {
             showFragment(FragmentAbout.TAG);
         } else {
-            Toast.makeText(this, "You are not a registered driver", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.notRegisteredDriver, Toast.LENGTH_SHORT).show();
             showFragment(FragmentUser.TAG);
         }
 

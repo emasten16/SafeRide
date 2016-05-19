@@ -56,7 +56,6 @@ public class FragmentDriver extends Fragment {
         mMapView.onCreate(savedInstanceState);
         setMap();
 
-
         // Button for driver
         // switches between Refresh, Arriving, and Dropped Off
         driver_state = REFRESH;
@@ -86,7 +85,7 @@ public class FragmentDriver extends Fragment {
                         //Backendless.Persistence.of(RequestPickUp.class).remove(current);
 
                         driver_state = ARRIVING;
-                        btnRefresh.setText("Arriving");
+                        btnRefresh.setText(R.string.btn_arriving);
 
                         requests.clear();
                     }
@@ -105,7 +104,7 @@ public class FragmentDriver extends Fragment {
 
                     // changes driver state
                     driver_state = DROPPED_OFF;
-                    btnRefresh.setText("Dropped Off");
+                    btnRefresh.setText(R.string.btn_droppedOff);
                 }
                 // Ends the process and switches back to being able to refresh Q
                 else if (driver_state == DROPPED_OFF) {
@@ -113,7 +112,7 @@ public class FragmentDriver extends Fragment {
                     mMap.clear();
 
                     driver_state = REFRESH;
-                    btnRefresh.setText("Refresh");
+                    btnRefresh.setText(R.string.btn_refresh);
                 }
 
 
@@ -135,12 +134,13 @@ public class FragmentDriver extends Fragment {
     public void sendArrivingMessage(String user) {
         Message message = new Message();
         message.setToUser(user);
-        message.setMessageText("Driver has arrived");
+        message.setMessageText(getActivity().getString(R.string.message_driverArrived));
         Backendless.Persistence.save(message, new BackendlessCallback<Message>() {
             @Override
             public void handleResponse(Message response) {
-                Toast.makeText(getActivity(), "arriving message sent", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.messageSent, Toast.LENGTH_SHORT).show();
             }
+
             @Override
             public void handleFault(BackendlessFault fault) {
                 super.handleFault(fault);
@@ -164,7 +164,7 @@ public class FragmentDriver extends Fragment {
 
                     // checks to see if request is emergency or not
                     if (r.isEmergency()) {
-                        emergencyRequests.add(0,r);
+                        emergencyRequests.add(0, r);
                     } else {
                         requests.add(0, r);
                     }
@@ -198,8 +198,6 @@ public class FragmentDriver extends Fragment {
 
     public static void setPoints(String place, int i) {
         LatLng newPlace = null;
-
-        // ALL DORMS
 
         // webiste for coordinates:
         // http://www.latlong.net/
@@ -269,6 +267,12 @@ public class FragmentDriver extends Fragment {
             mMap.addMarker(new MarkerOptions()
                     .position(newPlace));
         }
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override

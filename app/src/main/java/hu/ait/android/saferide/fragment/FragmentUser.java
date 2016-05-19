@@ -66,7 +66,7 @@ public class FragmentUser extends Fragment {
         btnMessages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               refreshMessages();
+                refreshMessages();
             }
         });
 
@@ -103,7 +103,6 @@ public class FragmentUser extends Fragment {
             }
         });
     }
-
 
     // shows User dialog to make a request
     public void showDialog() {
@@ -190,7 +189,6 @@ public class FragmentUser extends Fragment {
                     .position(newPlace));
         }
     }
-
 
     @Override
     public void onResume() {

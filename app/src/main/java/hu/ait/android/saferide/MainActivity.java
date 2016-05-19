@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.backendless.Backendless;
 
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity
 
         // if person is a USER open user fragment
         showFragment(FragmentUser.TAG);
+
     }
 
     @Override
@@ -75,7 +77,9 @@ public class MainActivity extends AppCompatActivity
         // switches between fragments
         if (id == R.id.nav_user) {
             showFragment(FragmentUser.TAG);
-        } else if (id == R.id.nav_driver) {
+        } else if (id == R.id.nav_driver
+                && (Boolean) Backendless.UserService.CurrentUser().getProperty("driver")) {
+            // GET PROPERTIES OF CURRENT USER
             showFragment(FragmentDriver.TAG);
         } else if (id == R.id.nav_settings) {
             showFragment(FragmentSettings.TAG);
@@ -83,6 +87,9 @@ public class MainActivity extends AppCompatActivity
             showFragment(FragmentHelp.TAG);
         } else if (id == R.id.nav_about) {
             showFragment(FragmentAbout.TAG);
+        } else {
+            Toast.makeText(this, "You are not a registered driver", Toast.LENGTH_SHORT).show();
+            showFragment(FragmentUser.TAG);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

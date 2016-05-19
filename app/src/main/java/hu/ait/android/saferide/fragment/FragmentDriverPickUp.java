@@ -57,6 +57,8 @@ public class FragmentDriverPickUp extends DialogFragment {
                 // starts drive UI
                 FragmentDriver fd = new FragmentDriver();
                 fd.startDrive(requestPickUp);
+
+                FragmentDriver.driver_state = FragmentDriver.ARRIVING;
             }
         });
 
@@ -68,6 +70,8 @@ public class FragmentDriverPickUp extends DialogFragment {
 
                 // SENDS MESSAGE TO USER SAYING REQUEST WAS DECLINED
                 dismiss();
+
+                FragmentDriver.driver_state = FragmentDriver.REFRESH;
             }
         });
 

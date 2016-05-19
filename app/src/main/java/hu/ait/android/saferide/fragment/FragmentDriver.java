@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -35,14 +36,18 @@ public class FragmentDriver extends Fragment {
     private static MapView mMapView;
     private static GoogleMap mMap;
     ArrayList<RequestPickUp> requests = new ArrayList<>();
-    private Projection projection;
+
+    public static short REFRESH = 0;
+    public static short ARRIVING = 1;
+    public static short DROPPED_OFF = 2;
+    public static short driver_state;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // sets layout
-        View rootView = inflater.inflate(R.layout.fragment_driver, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_driver, container, false);
 
         // sets map
         mMapView = (MapView) rootView.findViewById(R.id.map);
@@ -54,24 +59,41 @@ public class FragmentDriver extends Fragment {
         LatLng amherst = new LatLng(42.3708794, -72.5174623);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(amherst, 17.0f));
 
+        driver_state = REFRESH;
 
-        Button btnRefresh = (Button) rootView.findViewById(R.id.btnRefresh);
+        final Button btnRefresh = (Button) rootView.findViewById(R.id.btnRefresh);
+        btnRefresh.setText("Refresh");
         btnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                refreshQ();
+                if (driver_state == REFRESH) {
+                    refreshQ();
 
-                if (!requests.isEmpty()) {
-                    RequestPickUp current = requests.remove(0);
+                    if (!requests.isEmpty()) {
+                        RequestPickUp current = requests.remove(0);
 
-                    // REMOVE DATA FROM BACKENDLESS
-                    //Backendless.Persistence.of(RequestPickUp.class).remove(current);
+                        // REMOVE DATA FROM BACKENDLESS
+                        //Backendless.Persistence.of(RequestPickUp.class).remove(current);
 
-                    showDialog(current);
+                        showDialog(current);
+                        btnRefresh.setText("Arriving");
 
 
-                    requests.clear();
+                        requests.clear();
+                    }
+                } else if (driver_state == ARRIVING) {
+                    // SEND MESSAGE TO USER
+
+                    Toast.makeText(getActivity(), "Notifiy user I am arriving", Toast.LENGTH_SHORT).show();
+                    driver_state = DROPPED_OFF;
+                    btnRefresh.setText("Dropped Off");
+                } else if (driver_state == DROPPED_OFF) {
+
+                    Toast.makeText(getActivity(), "Dropped Off", Toast.LENGTH_SHORT).show();
+                    mMap.clear();
+                    driver_state = REFRESH;
+                    btnRefresh.setText("Refresh");
                 }
             }
         });
@@ -84,6 +106,7 @@ public class FragmentDriver extends Fragment {
     public void refreshQ() {
 
         // USE HANDLER AND EVENT BUS
+        // EMERGENCY Q
 
         Backendless.Persistence.of(RequestPickUp.class).find(new BackendlessCallback<BackendlessCollection<RequestPickUp>>() {
             @Override
@@ -123,6 +146,8 @@ public class FragmentDriver extends Fragment {
 
     public static void setPoints(String place, int i) {
         LatLng newPlace = null;
+
+        // ALL DORMS
 
         // webiste for coordinates:
         // http://www.latlong.net/

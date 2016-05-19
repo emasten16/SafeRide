@@ -8,7 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
+import com.backendless.async.callback.BackendlessCallback;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -17,7 +21,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Iterator;
+
 import hu.ait.android.saferide.R;
+import hu.ait.android.saferide.data.Message;
 
 /**
  * Created by emasten on 5/10/16.
@@ -29,7 +36,7 @@ public class FragmentUser extends Fragment {
     private static MapView mMapView;
     private static GoogleMap mMap;
     private static View rootView;
-    private Projection projection;
+
 
     @Nullable
     @Override
@@ -41,12 +48,7 @@ public class FragmentUser extends Fragment {
         // sets map
         mMapView = (MapView) rootView.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
-        mMapView.onResume();
-        mMap = mMapView.getMap();
-        mMap.getUiSettings().setAllGesturesEnabled(true);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        LatLng amherst = new LatLng(42.370829, -72.516884);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(amherst, 17.0f));
+        setMap();
 
 
         // switches to dialog fragment
@@ -59,11 +61,52 @@ public class FragmentUser extends Fragment {
             }
         });
 
+        // searches for messages to specific user and displays them
+        Button btnMessages = (Button) rootView.findViewById(R.id.btnMessages);
+        btnMessages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               refreshMessages();
+            }
+        });
+
 
         return rootView;
     }
 
-    void showDialog() {
+    public void setMap() {
+        mMapView.onResume();
+        mMap = mMapView.getMap();
+        mMap.getUiSettings().setAllGesturesEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        LatLng amherst = new LatLng(42.370829, -72.516884);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(amherst, 17.0f));
+    }
+
+    public void refreshMessages() {
+        // Gets messages from backendless
+        Backendless.Persistence.of(Message.class).find(new BackendlessCallback<BackendlessCollection<Message>>() {
+            @Override
+            public void handleResponse(BackendlessCollection<Message> response) {
+                Iterator<Message> iterator = response.getCurrentPage().iterator();
+
+                while (iterator.hasNext()) {
+                    Message message = iterator.next();
+
+                    // if the message is meant for current user, it posts it
+                    if (message.getToUser().equals(Backendless.UserService.CurrentUser().getEmail())) {
+                        Toast.makeText(getActivity(), message.getMessageText(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    // DELETE MESSAGE FROM BACKENDLESS ONCE DISPLAYED
+                }
+            }
+        });
+    }
+
+
+    // shows User dialog to make a request
+    public void showDialog() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag(FragmentUserPickUp.TAG);
         if (prev != null) {

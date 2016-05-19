@@ -78,8 +78,8 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_user) {
             showFragment(FragmentUser.TAG);
         } else if (id == R.id.nav_driver
+                // only opens if person is a driver
                 && (Boolean) Backendless.UserService.CurrentUser().getProperty("driver")) {
-            // GET PROPERTIES OF CURRENT USER
             showFragment(FragmentDriver.TAG);
         } else if (id == R.id.nav_settings) {
             showFragment(FragmentSettings.TAG);

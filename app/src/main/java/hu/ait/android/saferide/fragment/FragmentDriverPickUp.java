@@ -1,16 +1,24 @@
 package hu.ait.android.saferide.fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+
+import com.backendless.Backendless;
+import com.backendless.async.callback.BackendlessCallback;
+import com.backendless.exceptions.BackendlessFault;
 
 import hu.ait.android.saferide.R;
+import hu.ait.android.saferide.data.Message;
 import hu.ait.android.saferide.data.RequestPickUp;
 
 /**
@@ -35,43 +43,50 @@ public class FragmentDriverPickUp extends DialogFragment {
         // sets dialog data to the request
         final RequestPickUp requestPickUp = (RequestPickUp) getArguments().getSerializable(KEY_PICKUP);
 
+        final String user = requestPickUp.getUser();
         TextView tvName = (TextView) view.findViewById(R.id.driver_tvName);
-        tvName.setText("User: " + requestPickUp.getUser());
+        tvName.setText("User: " + user);
         TextView tvLocation = (TextView) view.findViewById(R.id.driver_tvLocation);
         tvLocation.setText("Location: " + requestPickUp.getLocation());
         TextView tvDestination = (TextView) view.findViewById(R.id.driver_tvDestination);
         tvDestination.setText("Destination: " + requestPickUp.getDestination());
         TextView tvNumPeople = (TextView) view.findViewById(R.id.driver_tvNumPeople);
         tvNumPeople.setText("Number of People: " + String.valueOf(requestPickUp.getNumPeople()));
+        TextView tvEmergency = (TextView) view.findViewById(R.id.driver_tvEmergency);
+        if (requestPickUp.isEmergency()) {
+            tvEmergency.setText("EMERGENCY");
+            tvEmergency.setTextColor(Color.RED);
+        }
 
-        // Emergency????
 
-
+        final Activity activity = getActivity();
         // accepts request
         alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                // SENDS MESSAGE TO USER SAYING DRIVER IS ON ITS WAY
+                // Sends message to user saying driver has accepted request and is on his/her way
+                Message message = new Message();
+                message.setToUser(user);
+                message.setMessageText("Request accepted: Driver on his/her way");
+                Backendless.Persistence.save(message, new BackendlessCallback<Message>() {
+                    @Override
+                    public void handleResponse(Message response) {
+                        Toast.makeText(activity, "request accepted message sent", Toast.LENGTH_SHORT).show();
+                    }
 
-                // starts drive UI
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        super.handleFault(fault);
+                        Toast.makeText(activity, "Error: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                // sets driving points
+                // driving state changed to arriving
                 FragmentDriver fd = new FragmentDriver();
                 fd.startDrive(requestPickUp);
-
                 FragmentDriver.driver_state = FragmentDriver.ARRIVING;
-            }
-        });
-
-
-        // dismisses request
-        alertDialogBuilder.setNegativeButton("Decline", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                // SENDS MESSAGE TO USER SAYING REQUEST WAS DECLINED
-                dismiss();
-
-                FragmentDriver.driver_state = FragmentDriver.REFRESH;
             }
         });
 

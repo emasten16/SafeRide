@@ -33,7 +33,7 @@ public class FragmentDriverPickUp extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setTitle("Pick Up Request");
+        alertDialogBuilder.setTitle(R.string.driver_pickUpRequest);
 
         // inflates layout
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -54,7 +54,7 @@ public class FragmentDriverPickUp extends DialogFragment {
         tvNumPeople.setText("Number of People: " + String.valueOf(requestPickUp.getNumPeople()));
         TextView tvEmergency = (TextView) view.findViewById(R.id.driver_tvEmergency);
         if (requestPickUp.isEmergency()) {
-            tvEmergency.setText("EMERGENCY");
+            tvEmergency.setText(R.string.emergency);
             tvEmergency.setTextColor(Color.RED);
         }
 
@@ -84,11 +84,11 @@ public class FragmentDriverPickUp extends DialogFragment {
     public void sendRequestAcceptedMessage(String user, final Activity activity) {
         Message message = new Message();
         message.setToUser(user);
-        message.setMessageText("Request accepted: Driver on his/her way");
+        message.setMessageText(activity.getString(R.string.message_driveEnRoute));
         Backendless.Persistence.save(message, new BackendlessCallback<Message>() {
             @Override
             public void handleResponse(Message response) {
-                Toast.makeText(activity, "request accepted message sent", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, R.string.messageSent, Toast.LENGTH_SHORT).show();
             }
 
             @Override

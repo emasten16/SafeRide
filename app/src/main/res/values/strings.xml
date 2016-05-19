@@ -5,6 +5,48 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="about_fragment">
+        "SafeRide\n"
+        "Created by Zeina Amhaz and Emily Masten\n\n"
+
+        "SafeRide is an application meant to make calling Safe Ride on campus easier and quicker."
+        "We are planning to continue working on this app this summer and next year, hoping to "
+        "have it done and ready to be launched by the end of next year. For our final project, "
+        "we implemented the main basics and important background parts.\n\n"
+
+        "Check the Help page for how the app works. If there is anything that we can do differently,"
+        " more efficiently, or just better, we would love your opinion and input!"
+    </string>
+    <string name="help_fragment">
+        "How to use SafeRide\n\n"
+
+        "User:\n"
+        "1. Press \"Set PickUp\" to request a driver to come pick you up.\n"
+        "2. Set your current location, destination, number of people, and whether of not this is "
+        "an emergency.\n"
+        "3. Press \"Messages\" to see get notifications from driver (ie whether or not the driver "
+        "has accepted the request and has arrived).\n\n"
+
+        "Driver:\n"
+        "1. Press \"Refresh\" to see if a request is waiting for you.\n"
+        "2. When there is a new request, a dialog fragment pops up notifying you of the person "
+        "requesting a drive, their location, their destination, number of people, and whether or "
+        "not it\'s an emergency.\n"
+        "3. When you have arrived at their location, press \"Arriving\" to notify the user.\n"
+        "4. When you have dropped the person off, press \"Dropped Off\" to go back to refreshing "
+        "for new requests."
+    </string>
+    <string name="btn_arriving">Arriving</string>
+    <string name="btn_droppedOff">Dropped Off</string>
+    <string name="btn_refresh">Refresh</string>
+    <string name="message_driverArrived">Driver has arrived</string>
+    <string name="message_driveEnRoute">Request accepted: Driver enRoute</string>
+    <string name="emergency">EMERGENCY</string>
+    <string name="driver_pickUpRequest">Pick Up Request</string>
+    <string name="notRegisteredDriver">You are not a registered driver</string>
+    <string name="user_pickUpRequest">Set Pick Up</string>
+    <string name="setNumPeople">Set Number of People</string>
+    <string name="messageSent">Message sent</string>
 
 
     <string-array name="places_array">

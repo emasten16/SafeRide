@@ -53,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void handleResponse(BackendlessUser response) {
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                finish();
             }
 
             @Override

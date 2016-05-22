@@ -56,29 +56,25 @@ public class FragmentDriver extends Fragment {
         mMapView.onCreate(savedInstanceState);
         setMap();
 
+        driver_state = REFRESH;
+
         // Button for driver
         // switches between Refresh, Arriving, and Dropped Off
-        driver_state = REFRESH;
         final Button btnRefresh = (Button) rootView.findViewById(R.id.btnRefresh);
         btnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                RequestPickUp current = null;
+                //RequestPickUp current = null;
 
                 // Refreshes Q to check for requests
                 if (driver_state == REFRESH) {
-                    refreshQ();
+                    refreshQAndDeleteFirst();
                     // checks to see if there's a new request
                     // makes emergency requests priority
-                    if (!requests.isEmpty()) {
-                        current = requests.get(0);
-                    }
-                    if (!emergencyRequests.isEmpty()) {
-                        current = emergencyRequests.get(0);
-                    }
 
-                    if (current != null) {
+
+                    /*if (current != null) {
                         showDialog(current);
 
                         // REMOVE DATA FROM BACKENDLESS
@@ -88,10 +84,10 @@ public class FragmentDriver extends Fragment {
                         btnRefresh.setText(R.string.btn_arriving);
 
                         requests.clear();
-                    }
+                    }*/
                 }
                 // Notifies User that driver is arriving
-                else if (driver_state == ARRIVING) {
+                /*else if (driver_state == ARRIVING) {
                     if (!requests.isEmpty()) {
                         current = requests.get(0);
                     }
@@ -113,22 +109,13 @@ public class FragmentDriver extends Fragment {
 
                     driver_state = REFRESH;
                     btnRefresh.setText(R.string.btn_refresh);
-                }
+                }*/
 
 
             }
         });
 
         return rootView;
-    }
-
-    public void setMap() {
-        mMapView.onResume();
-        mMap = mMapView.getMap();
-        mMap.getUiSettings().setAllGesturesEnabled(true);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        LatLng amherst = new LatLng(42.3708794, -72.5174623);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(amherst, 17.0f));
     }
 
     public void sendArrivingMessage(String user) {
@@ -149,7 +136,7 @@ public class FragmentDriver extends Fragment {
         });
     }
 
-    public void refreshQ() {
+    /*public void refreshQ() {
 
         // USE HANDLER AND EVENT BUS
         // EMERGENCY Q
@@ -172,6 +159,39 @@ public class FragmentDriver extends Fragment {
             }
         });
 
+    }*/
+
+    public void refreshQAndDeleteFirst() {
+        Backendless.Persistence.of(RequestPickUp.class).find(new BackendlessCallback<BackendlessCollection<RequestPickUp>>() {
+            @Override
+            public void handleResponse(BackendlessCollection<RequestPickUp> response) {
+                Iterator<RequestPickUp> iterator = response.getCurrentPage().iterator();
+
+                while (iterator.hasNext()) {
+                    RequestPickUp r = iterator.next();
+
+                    if (r.isEmergency()) {
+                        emergencyRequests.add(0, r);
+                    } else {
+                        requests.add(0, r);
+                    }
+                }
+                if (!emergencyRequests.isEmpty()) {
+                    requests.add(0, emergencyRequests.get(0));
+                }
+
+                if (!requests.isEmpty()) {
+                    RequestPickUp current = requests.remove(0);
+
+                    // REMOVE DATA FROM BACKENDLESS
+                    //Backendless.Persistence.of(RequestPickUp.class).remove(current);
+
+                    showDialog(current);
+
+                    requests.clear();
+                }
+            }
+        });
     }
 
 
@@ -184,7 +204,6 @@ public class FragmentDriver extends Fragment {
         dialog.setCancelable(false);
         dialog.show(getFragmentManager(), FragmentDriverPickUp.TAG);
     }
-
 
     public void startDrive(RequestPickUp r) {
         mMap.clear();
@@ -267,6 +286,15 @@ public class FragmentDriver extends Fragment {
             mMap.addMarker(new MarkerOptions()
                     .position(newPlace));
         }
+    }
+
+    public void setMap() {
+        mMapView.onResume();
+        mMap = mMapView.getMap();
+        mMap.getUiSettings().setAllGesturesEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        LatLng amherst = new LatLng(42.3708794, -72.5174623);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(amherst, 17.0f));
     }
 
 

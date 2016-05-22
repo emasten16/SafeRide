@@ -8,25 +8,25 @@
         android:id="@+id/driver_tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name" />
+        android:text="@string/name" />
 
     <TextView
         android:id="@+id/driver_tvLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Location" />
+        android:text="@string/location" />
 
     <TextView
         android:id="@+id/driver_tvDestination"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Destination" />
+        android:text="@string/destination" />
 
     <TextView
         android:id="@+id/driver_tvNumPeople"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Number of People" />
+        android:text="@string/numPeople" />
 
     <TextView
         android:id="@+id/driver_tvEmergency"

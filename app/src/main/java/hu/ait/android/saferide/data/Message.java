@@ -1,15 +1,12 @@
 package hu.ait.android.saferide.data;
 
 /**
- * Created by emasten on 5/19/16.
+ * Created by emasten on 5/22/16.
  */
 public class Message {
-    private String toUser;
-    private String messageText;
 
-    public Message() {
-
-    }
+    public String toUser;
+    public String messageText;
 
     public String getToUser() {
         return toUser;

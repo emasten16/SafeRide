@@ -47,6 +47,21 @@
     <string name="user_pickUpRequest">Set Pick Up</string>
     <string name="setNumPeople">Set Number of People</string>
     <string name="messageSent">Message sent</string>
+    <string name="password">Password</string>
+    <string name="conf_password">Confirm Password</string>
+    <string name="amherst_email">Enter Amherst Email</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="driver_conf">Are you a driver?</string>
+    <string name="login">Login</string>
+    <string name="your_location">Your Location:</string>
+    <string name="destination">Destination</string>
+    <string name="numPeople">Number of People</string>
+    <string name="is_emergency">Emergency?</string>
+    <string name="messages">Messages</string>
+    <string name="set_pickup">Set Pickup</string>
+    <string name="location">Location</string>
+    <string name="name">Name</string>
+    <string name="refresh">Refresh</string>
 
 
     <string-array name="places_array">

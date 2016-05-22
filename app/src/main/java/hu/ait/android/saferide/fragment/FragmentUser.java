@@ -12,7 +12,9 @@ import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
+import com.backendless.async.callback.AsyncCallback;
 import com.backendless.async.callback.BackendlessCallback;
+import com.backendless.exceptions.BackendlessFault;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -95,11 +97,25 @@ public class FragmentUser extends Fragment {
 
                     // if the message is meant for current user, it posts it
                     if (message.getToUser().equals(Backendless.UserService.CurrentUser().getEmail())) {
-                        Toast.makeText(getActivity(), message.getMessageText(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), message.getMessageText(), Toast.LENGTH_LONG).show();
                     }
 
-                    // DELETE MESSAGE FROM BACKENDLESS ONCE DISPLAYED
+                    delete(message);
                 }
+            }
+        });
+    }
+
+    public void delete(Message m) {
+        // delete from backendless
+        Backendless.Persistence.of(Message.class).remove(m, new AsyncCallback<Long>() {
+            @Override
+            public void handleResponse(Long response) {
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(getActivity(), fault.getMessage() + fault.getDetail() + fault.getCode(), Toast.LENGTH_SHORT).show();
             }
         });
     }

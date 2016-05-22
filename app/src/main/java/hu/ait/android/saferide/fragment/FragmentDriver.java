@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
+import com.backendless.async.callback.AsyncCallback;
 import com.backendless.async.callback.BackendlessCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -44,6 +45,7 @@ public class FragmentDriver extends Fragment {
     public static short DROPPED_OFF = 2;
     public static short driver_state;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,38 +67,34 @@ public class FragmentDriver extends Fragment {
             @Override
             public void onClick(View v) {
 
-                //RequestPickUp current = null;
-
+                RequestPickUp current = null;
                 // Refreshes Q to check for requests
                 if (driver_state == REFRESH) {
                     refreshQAndDeleteFirst();
                     // checks to see if there's a new request
                     // makes emergency requests priority
+                    if (!requests.isEmpty()) {
+                        current = requests.get(0);
 
+                        delete(current);
 
-                    /*if (current != null) {
                         showDialog(current);
-
-                        // REMOVE DATA FROM BACKENDLESS
-                        //Backendless.Persistence.of(RequestPickUp.class).remove(current);
 
                         driver_state = ARRIVING;
                         btnRefresh.setText(R.string.btn_arriving);
 
-                        requests.clear();
-                    }*/
+                    }
                 }
                 // Notifies User that driver is arriving
-                /*else if (driver_state == ARRIVING) {
+                else if (driver_state == ARRIVING) {
                     if (!requests.isEmpty()) {
                         current = requests.get(0);
-                    }
-                    if (!emergencyRequests.isEmpty()) {
-                        current = emergencyRequests.get(0);
                     }
 
                     // sends arriving message to user
                     sendArrivingMessage(current.getUser());
+
+                    requests.clear();
 
                     // changes driver state
                     driver_state = DROPPED_OFF;
@@ -109,7 +107,8 @@ public class FragmentDriver extends Fragment {
 
                     driver_state = REFRESH;
                     btnRefresh.setText(R.string.btn_refresh);
-                }*/
+
+                }
 
 
             }
@@ -136,30 +135,20 @@ public class FragmentDriver extends Fragment {
         });
     }
 
-    /*public void refreshQ() {
-
-        // USE HANDLER AND EVENT BUS
-        // EMERGENCY Q
-
-        Backendless.Persistence.of(RequestPickUp.class).find(new BackendlessCallback<BackendlessCollection<RequestPickUp>>() {
+    public void delete(RequestPickUp r) {
+        // delete from backendless
+        Backendless.Persistence.of(RequestPickUp.class).remove(r, new AsyncCallback<Long>() {
             @Override
-            public void handleResponse(BackendlessCollection<RequestPickUp> response) {
-                Iterator<RequestPickUp> iterator = response.getCurrentPage().iterator();
+            public void handleResponse(Long response) {
+            }
 
-                while (iterator.hasNext()) {
-                    RequestPickUp r = iterator.next();
-
-                    // checks to see if request is emergency or not
-                    if (r.isEmergency()) {
-                        emergencyRequests.add(0, r);
-                    } else {
-                        requests.add(0, r);
-                    }
-                }
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(getActivity(), fault.getMessage() + fault.getDetail() + fault.getCode(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
-    }*/
 
     public void refreshQAndDeleteFirst() {
         Backendless.Persistence.of(RequestPickUp.class).find(new BackendlessCallback<BackendlessCollection<RequestPickUp>>() {
@@ -180,16 +169,6 @@ public class FragmentDriver extends Fragment {
                     requests.add(0, emergencyRequests.get(0));
                 }
 
-                if (!requests.isEmpty()) {
-                    RequestPickUp current = requests.remove(0);
-
-                    // REMOVE DATA FROM BACKENDLESS
-                    //Backendless.Persistence.of(RequestPickUp.class).remove(current);
-
-                    showDialog(current);
-
-                    requests.clear();
-                }
             }
         });
     }

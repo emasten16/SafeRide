@@ -24,8 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/login_etPassword"
         android:layout_centerHorizontal="true"
-        android:inputType="textEmailAddress"
-        android:hint="@string/amherst_email" />
+        android:hint="@string/amherst_email"
+        android:inputType="textEmailAddress" />
 
     <TextView
         android:id="@+id/login_tvText"
@@ -37,22 +37,26 @@
         android:textSize="50dp" />
 
     <LinearLayout
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/login_etPassword"
         android:layout_centerInParent="true"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/login_btnSignUp"
+            style="@style/ButtonText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/purple_button"
             android:text="@string/sign_up" />
 
         <Button
             android:id="@+id/login_btnLogin"
+            style="@style/ButtonText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/purple_button"
             android:text="@string/login" />
     </LinearLayout>
 
